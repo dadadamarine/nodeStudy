@@ -38,14 +38,23 @@ app.get('/main', (req, res) =>{
     res.sendFile(__dirname + "/public/main.html"); // 절대경로 다쓰기 불편 : node.js에서 제공하는 변수사용 __dirname
 });
 
+
+
+/* 
 app.post('/email_post', (req, res)=>{
     // get의경우 ,  req.param('email') 이라고 적어서 url 에있는 파라미터를 뺴서 쓸수 있음.
     // post의 경우 별도의 모듈 필요 : body parser
     console.log(req.body.email); // email주소가 출력됨.
     res.send("<h1>welcome! "  + req.body.email +"</h1>");
-     
 });
-
+ */
 
 //html + data를 합쳐서 전달하기 
 // 그러기 위해 ejs 모듈 설치
+app.post('/email_post', (req, res)=>{
+    // get의경우 ,  req.param('email') 이라고 적어서 url 에있는 파라미터를 뺴서 쓸수 있음.
+    // post의 경우 별도의 모듈 필요 : body parser
+    console.log(req.body.email); // email주소가 출력됨.
+    //res.send("<h1>welcome! "  + req.body.email +"</h1>");
+    res.render('email.ejs' , {'email' : req.body.email}); // 뒤에 오브젝트를 넣어줌 , email이라고 적힌애들을 ejs에 찾아서 치환하여 클라이언트로 응답 넘김.
+});
