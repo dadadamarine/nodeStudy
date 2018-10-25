@@ -18,7 +18,7 @@ app.use(bodyParser.json()); // express야, 나 bodyParser 쓸거야
 // 클라에서 json형태로 올때도 있고, post로 올때도 있어서
 app.use(bodyParser.urlencoded({extended:true})); // 클라와 서버의 통신은 아스키 형태의 데이터만 보낼수 있음 ( 그래서 다른 문자는 인코딩 해서 보냄. ) 
 // 이 두경우 모두 처리하겠다
-
+app.set('view engine','ejs'); // 뷰 엔진으로 ejs사용.
 
 
 //get요청이 올경우
@@ -47,4 +47,5 @@ app.post('/email_post', (req, res)=>{
 });
 
 
-//html + data를 합쳐서 전달하기
+//html + data를 합쳐서 전달하기 
+// 그러기 위해 ejs 모듈 설치
