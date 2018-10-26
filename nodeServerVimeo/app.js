@@ -67,6 +67,15 @@ app.post('/email_post', (req, res)=>{
 // ajax : 웹 페이지 전체를 다시 로딩하지 않고도, 웹 페이지의 일부분만을 갱신할 수 있습니다.
 app.post('/ajax_send_email', function(req, res){
     console.log(req.body.email);
-    var responserData = {'result': 'ok' , 'email' : req.body.email};
-    res.json(responserData);
+    //check validation 필요 ==> select db를 통한 db조회를 통해서.
+    var responseData = {'result': 'ok' , 'email' : req.body.email};
+    res.json(responseData);
+});
+
+app.post('/ajax_search' , (req,res)=>{
+    console.log(req.body.searchData);
+
+    var responseData = {'result':'ok', 'searchData' : req.body.searchData, 'responseData' : 'null'};
+
+    res.json(responseData);
 });
