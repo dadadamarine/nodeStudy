@@ -1,6 +1,10 @@
 const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
+
+const router  = require('./router/index');
+
+
 app.listen(3000, ()=>{
     console.log("start express server on port 3000");
     //3000포트에서 이 함수를 한번 실행하고, 응답을 받기위해 대기중 상태에 머무름
@@ -20,23 +24,12 @@ app.use(bodyParser.urlencoded({extended:true})); // 클라와 서버의 통신�
 // 이 두경우 모두 처리하겠다
 app.set('view engine','ejs'); // 뷰 엔진으로 ejs사용.
 
+app.use(router); // path 가 없을때는 router가 처리
 
-//get요청이 올경우
-app.get('/', (req, res)=>{
-    //콜백함수 만듬
-    //res.send("<h1>hi friends</h1>");
 
-    //루트로 접속햇을때 main.html 파일을 보내주려면?
 
-    //모든 요청에 대해서 일일히 처리를 해주게 되있음!
-    //res.sendFile("C:/Users/ms/Desktop/스터디/nodeJS/nodeServerVimeo/public/main.html");
-    
-    res.sendFile(__dirname + "/public/main.html"); // 절대경로 다쓰기 불편 : node.js에서 제공하는 변수사용 __dirname
-});
 
-app.get('/main', (req, res) =>{
-    res.sendFile(__dirname + "/public/main.html"); // 절대경로 다쓰기 불편 : node.js에서 제공하는 변수사용 __dirname
-});
+
 
 
 
@@ -50,32 +43,14 @@ app.post('/email_post', (req, res)=>{
  */
 
 
-
-//html + data를 합쳐서 전달하기 
-// 그러기 위해 ejs 모듈 설치
-app.post('/email_post', (req, res)=>{
-    // get의경우 ,  req.param('email') 이라고 적어서 url 에있는 파라미터를 뺴서 쓸수 있음.
-    // post의 경우 별도의 모듈 필요 : body parser
-    console.log(req.body.email); // email주소가 출력됨.
-    //res.send("<h1>welcome! "  + req.body.email +"</h1>");
-    res.render('email.ejs' , {'email' : req.body.email}); // 뒤에 오브젝트를 넣어줌 , email이라고 적힌애들을 ejs에 찾아서 치환하여 클라이언트로 응답 넘김.
-});
-
-
-
-
-// ajax : 웹 페이지 전체를 다시 로딩하지 않고도, 웹 페이지의 일부분만을 갱신할 수 있습니다.
-app.post('/ajax_send_email', function(req, res){
-    console.log(req.body.email);
-    //check validation 필요 ==> select db를 통한 db조회를 통해서.
-    var responseData = {'result': 'ok' , 'email' : req.body.email};
-    res.json(responseData);
-});
-
-app.post('/ajax_search' , (req,res)=>{
+/* app.post('/ajax_search' , (req,res)=>{
     console.log(req.body.searchData);
 
     var responseData = {'result':'ok', 'searchData' : req.body.searchData, 'responseData' : 'null'};
 
     res.json(responseData);
 });
+ */
+
+//mysql 사용을 위해서 mysql 노드 모듈을 설치해야 한다.
+
