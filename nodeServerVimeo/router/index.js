@@ -2,11 +2,13 @@ var express = require('express');
 var app = express()
 var router = express.Router();
 var path = require('path'); 
-const main = require('./main');
-const email = require('./email');
+const main = require('./main/main');
+const email = require('./email/email');
+const join = require('./join/index');
 
 //get요청이 올경우
-router.get('/', (req, res)=>{
+router.get('/', (req, res)=>
+{
     //콜백함수 만듬
     //res.send("<h1>hi friends</h1>");
 
@@ -20,6 +22,7 @@ router.get('/', (req, res)=>{
 
 router.use('/main', main); // 바디 파서 선언등은 app.js 에서 이루어 졌어도 , 이 파일 안에서도 사용가능
 router.use('/email', email); 
+router.use('/join', join);
 
 //여기서 router를 export시켰는데 , router에 들어간게 get밖에 없음. app -> router로 바꿔줘야함.
 //라우터에 각 요청별로 이걸 처리해~! 라고 지정해둠 , 다른모듈쓸때는 use를 쓰면됨.
