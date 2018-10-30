@@ -40,8 +40,12 @@ router.post('/', (req, res)=>{
 /*     let query = connection.query('insert into user (email,name,pw) values ("' + email+'","'+name +'","'+ password+'")', (err,rows)=>{ */
     let query = connection.query('insert into user set ?', sqlSet, (err,rows)=>{ 
         if(err) {throw err;}
-        console.log("ok db insert", rows.insertId , name);
+        else{
+            res.render('welcome.ejs', {'name': name, 'id':rows.insertId}); 
+            // 렌더 함수는 views라는 디렉토리를 자동으로 찾음
+        }
     });
+    
 })
 
 module.exports= router;
