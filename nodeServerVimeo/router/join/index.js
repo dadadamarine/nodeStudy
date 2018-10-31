@@ -3,6 +3,8 @@ const app = express();
 const router = express.Router();
 const path = require('path');
 const mysql = require('mysql');
+const passport =require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 // https://expressjs.com/en/guide/database-integration.html#mysql 사이트 가이드 참조
 
 
@@ -27,17 +29,29 @@ connection.connect();
 // 그러기 위해 ejs 모듈 설치
 router.get('/', (req, res)=>{
     console.log('join router active');
-    res.sendFile(path.join(__dirname, '../../public/join.html'));
+    res.render('join.ejs');
 });
 
-router.post('/', (req, res)=>{
+//passport 설정 해줘야함
+passport.use('local-join', new LocalStrategy({ 
+    //passport 전략중 local-join 사용
+    //얘를 라우팅 할때 불러서 사용함.
+        usernameField: 'email',
+        passwordField: 'password', // form 에서 email,password를 파라미터로 전달받기 때문에 그걸 사용한다고 해줌.
+        passReqToCallback : true
+    }, (req, email, password, done)=>{
+        console.log('local-join callback called')
+    }
+    ));
+
+/* router.post('/', (req, res)=>{
     const body = req.body;
     const email = body.email;
     const name = body.name;
     const password = body.password;
 
     var sqlSet = {email : email, name : name , pw : password}
-/*     let query = connection.query('insert into user (email,name,pw) values ("' + email+'","'+name +'","'+ password+'")', (err,rows)=>{ */
+//     let query = connection.query('insert into user (email,name,pw) values ("' + email+'","'+name +'","'+ password+'")', (err,rows)=>{ 
     let query = connection.query('insert into user set ?', sqlSet, (err,rows)=>{ 
         if(err) {throw err;}
         else{
@@ -46,6 +60,9 @@ router.post('/', (req, res)=>{
         }
     });
     
-})
+}); */ 
+//기존에 이렇게 post로 처리하던걸 passport 모듈을 이용해서 처리하고 + 세션까지 만드는 방식으로 처리
+// npm install passport passport-local express-session connect-flash --save-dev
+
 
 module.exports= router;

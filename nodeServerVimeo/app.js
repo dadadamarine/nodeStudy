@@ -1,8 +1,11 @@
 const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
-
 const router  = require('./router/index');
+const passport =require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const session = require('express-session');
+const flash = require('connect-flash');
 
 
 app.listen(3000, ()=>{
@@ -23,6 +26,17 @@ app.use(bodyParser.json()); // express야, 나 bodyParser 쓸거야
 app.use(bodyParser.urlencoded({extended:true})); // 클라와 서버의 통신은 아스키 형태의 데이터만 보낼수 있음 ( 그래서 다른 문자는 인코딩 해서 보냄. ) 
 // 이 두경우 모두 처리하겠다
 app.set('view engine','ejs'); // 뷰 엔진으로 ejs사용.
+
+//router전에 등록해야함
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized : true
+    //https://github.com/expressjs/session
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 app.use(router); // path 가 없을때는 router가 처리
 
