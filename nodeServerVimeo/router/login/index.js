@@ -29,7 +29,7 @@ connection.connect();
 // 그러기 위해 ejs 모듈 설치
 
 
-/* router.get('/', (req, res)=>{
+router.get('/', (req, res)=>{
     //중복 아이디시 전달되는 message받기
     let msg;
     const errMsg = req.flash('error'); 
@@ -38,12 +38,6 @@ connection.connect();
     res.render('login.ejs', {'message': msg});
 });
 
-passport.serializeUser((user, done)=>{
-    //done에서 flase가 없이 객체값을 전달했을때, 그값을 받아 사용가능.
-
-    console.log('passport session save : ', user.id);
-    done(null, user.id);
-}); */
 
 passport.serializeUser((user, done)=>{
     //done에서 flase가 없이 객체값을 전달했을때, 그값을 받아 사용가능.
@@ -59,13 +53,24 @@ passport.deserializeUser((email, done)=>{
     done(null, email);
 });
 
+
+
+/* passport.serializeUser((user, done)=>{
+    //done에서 flase가 없이 객체값을 전달했을때, 그값을 받아 사용가능.
+
+    console.log('passport session save : ', user.id);
+    done(null, user.id);
+}); 
+
+
+
 passport.deserializeUser((id, done)=>{
     //세션값의 id를 뽑은다음에 다시 db를 조회해서 추가 정보를 가져옴이 가능
 
     console.log('passport session save getdata : ', id);
     done(null, id);
 });
-
+ */
 //passport 설정 해줘야함
 passport.use('local-login', new LocalStrategy({ 
     //passport 전략중 local-join 사용
