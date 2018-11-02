@@ -33,9 +33,17 @@
             xhr.send(data); // json형태의 데이터가 오브젝트 형태로 날라감.
             xhr.addEventListener('load',()=>{
                 let result = JSON.parse(xhr.responseText); // xhr.~text자체는 문자열이므로 JSON 파싱을 해줘야함.
-                let resuleDiv = document.querySelector(".result");
-                if(result.email) resuleDiv.innerHTML="welcome!, "+ result.email;
-                document.querySelector(".result").innerHTML = result.email;
+                let resultDiv = document.querySelector(".result");
+                console.log(result);
+                if(result.email) {
+                    console.log("아이디 있음");
+                    resultDiv.innerHTML="welcome!, "+ result.email;
+                }
+                else {
+                    console.log(1);
+                    resultDiv.innerHTML = result;
+                }
+
             });
             //응답이 왔을때
 

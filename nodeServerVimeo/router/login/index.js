@@ -61,10 +61,10 @@ passport.use('local-login', new LocalStrategy({
         const query = connection.query('select * from user where email=?', [email], (err, rows)=>{
             if(err) return done(err); // 없을경우 done으로 마무리
             if(rows.length){ // 있을경우 넘어감
-                return done(null, {'email':rows.email, 'id':rows[0].UID});
+                return done(null, {'email':email, 'id':rows[0].UID});
 
             }else{
-                return done(null , false, {'message': "your login info is not found"}); //정상 작동일경우 false 안넣고 , 값을 넣어주면됨
+                return done(null , false, {'message': "your login info is not found >.<"}); //정상 작동일경우 false 안넣고 , 값을 넣어주면됨
                 // 성공일 경우 메인으로 감
                 // + 시리얼 라이즈 처리 해줘야함
             }
@@ -76,6 +76,8 @@ passport.use('local-login', new LocalStrategy({
 router.post('/', (req,res,next)=>{
        //이부분은 login페이지에선 json 으로 ajax를 처리를 해주기 위해 커스텀  콜백으로 동작
     passport.authenticate('local-login', (err, user, info)=>{ 
+        //console.log(user);
+        //console.log(info);
         if(err) res.status(500).json(err);
         if(!user) return res.status(401).json(info.message);
 
