@@ -7,6 +7,7 @@ const email = require('./email/email');
 const join = require('./join/index');
 const login = require('./login/index');
 const logout = require('./logout/index');
+const movie = require('./movie/index');
 //get요청이 올경우
 router.get('/', (req, res)=>
 {
@@ -26,6 +27,7 @@ router.use('/email', email);
 router.use('/join', join);
 router.use('/login', login);
 router.use('/logout', logout);
+router.use('/movie', movie);
 //여기서 router를 export시켰는데 , router에 들어간게 get밖에 없음. app -> router로 바꿔줘야함.
 //라우터에 각 요청별로 이걸 처리해~! 라고 지정해둠 , 다른모듈쓸때는 use를 쓰면됨.
 module.exports= router;
