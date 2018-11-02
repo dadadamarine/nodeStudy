@@ -36,11 +36,11 @@
                 let resultDiv = document.querySelector(".result");
                 console.log(result);
                 if(result.email) {
-                    console.log("아이디 있음");
-                    resultDiv.innerHTML="welcome!, "+ result.email;
+                    //resultDiv.innerHTML="welcome!, "+ result.email;
+                    window.location.href ="/main"; // 메인으로 보내기
+                    //메인에서는 
                 }
                 else {
-                    console.log(1);
                     resultDiv.innerHTML = result;
                 }
 

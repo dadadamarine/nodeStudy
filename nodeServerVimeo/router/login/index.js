@@ -27,7 +27,9 @@ const connection = mysql.createConnection({
 connection.connect();
 //html + data를 합쳐서 전달하기 
 // 그러기 위해 ejs 모듈 설치
-router.get('/', (req, res)=>{
+
+
+/* router.get('/', (req, res)=>{
     //중복 아이디시 전달되는 message받기
     let msg;
     const errMsg = req.flash('error'); 
@@ -41,6 +43,20 @@ passport.serializeUser((user, done)=>{
 
     console.log('passport session save : ', user.id);
     done(null, user.id);
+}); */
+
+passport.serializeUser((user, done)=>{
+    //done에서 flase가 없이 객체값을 전달했을때, 그값을 받아 사용가능.
+    
+    console.log('passport session save : ', user.email);
+    done(null, user.email);
+});
+
+passport.deserializeUser((email, done)=>{
+    //세션값의 id를 뽑은다음에 다시 db를 조회해서 추가 정보를 가져옴이 가능
+
+    console.log('passport session save getdata : ', email);
+    done(null, email);
 });
 
 passport.deserializeUser((id, done)=>{
@@ -87,6 +103,7 @@ router.post('/', (req,res,next)=>{
         });
         
     })(req,res,next);/* authenticate가 메서드를 반환 */
+    //여기를 통과하면  serializeUser 쪽  = 세션을 저장하는쪽을 통과
 }
 );
 
