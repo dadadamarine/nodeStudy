@@ -32,7 +32,7 @@ router.get('/', (req, res)=>{
     let msg;
     const errMsg = req.flash('error'); 
     if(errMsg) msg = errMsg;
-    console.log('get join router active');
+    console.log('get login router active');
     res.render('login.ejs', {'message': msg});
 });
 
@@ -58,6 +58,7 @@ passport.use('local-login', new LocalStrategy({
         passwordField: 'password', // form 에서 email,password를 파라미터로 전달받기 때문에 그걸 사용한다고 해줌.
         passReqToCallback : true
     }, (req, email, password, done)=>{
+        console.log(1);
         const query = connection.query('select * from user where email=?', [email], (err, rows)=>{
             if(err) return done(err); // 없을경우 done으로 마무리
             if(rows.length){ // 있을경우 넘어감
@@ -80,13 +81,20 @@ passport.use('local-login', new LocalStrategy({
     }
     ));
 
-router.post('/', passport.authenticate('local-login', { 
-    // 위에서 정의한 local-join사용 
-    successRedirect: '/main', // 성공일때는 main 리다이렉트 시킴
-    failureRedirect: '/join', // 다시 회원가입창 , 
-    failureFlash : true
-    //이부분은 login페이지에선 json 으로 ajax를 처리를 해주기 위해 커스텀 콜백으로 동작
-}));
+router.post('/', (req,res,next)=>{
+       //이부분은 login페이지에선 json 으로 ajax를 처리를 해주기 위해 커스텀  콜백으로 동작
+    passport.authenticate('local-login', (err, user, info)=>{ 
+        if(err) res.status(500).json(err);
+        if(!user) return res.status(401).json(info.message);
+
+        req.logIn(user, function(err){
+            if(err) { return next(err); }
+            return res.json(user);
+        });
+        
+    })(req,res,next);
+}
+);
 
 
 module.exports= router;
