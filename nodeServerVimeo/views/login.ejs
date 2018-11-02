@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>email form</title>
+</head>
+<body>
+    <form action="/login" method="post">
+        email : <input  type="text" name="email" ><br/>
+        passwd :  <input type="password" name="password"><br/>
+    </form>
+
+    <button class="ajaxsend">login</button>
+
+    <div class="result"></div>
+
+    <script>
+        
+        document.querySelector('.ajaxsend').addEventListener('click', ()=>{
+            var email = document.getElementsByName('email')[0].value;
+            var password = document.getElementsByName('password')[0].value;
+            /* ByName로 검색시 리턴이 nodelist라서 바로 .value를 붙이면 안됨 */
+            sendAjax('http://127.0.0.1:3000/login', {'email':email, 'password': password});
+        })
+
+        function sendAjax(url, data){
+            data = JSON.stringify(data);         //data 입력할때는 문자열 데이터를 넣어주어야함, 서버에서 문자열을 주고받을때는 object형태를 쓸수 없으니 string으로 바꿔줘야함.
+            
+            console.log(data);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', url);
+            xhr.setRequestHeader('Content-Type', "application/json"); // json형으로 보낼때는 이렇게 써줘야함.
+            xhr.send(data); // json형태의 데이터가 오브젝트 형태로 날라감.
+            xhr.addEventListener('load',()=>{
+                let result = JSON.parse(xhr.responseText); // xhr.~text자체는 문자열이므로 JSON 파싱을 해줘야함.
+                let resultDiv = document.querySelector(".result");
+                console.log(result);
+                if(result.email) {
+                    //resultDiv.innerHTML="welcome!, "+ result.email;
+                    window.location.href ="/main"; // 메인으로 보내기
+                    //메인에서는 
+                }
+                else {
+                    resultDiv.innerHTML = result;
+                }
+
+            });
+            //응답이 왔을때
+
+        }
+    </script>
+</body>
+</html>
