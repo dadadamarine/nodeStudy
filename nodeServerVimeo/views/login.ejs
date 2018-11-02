@@ -33,7 +33,8 @@
             xhr.send(data); // json형태의 데이터가 오브젝트 형태로 날라감.
             xhr.addEventListener('load',()=>{
                 let result = JSON.parse(xhr.responseText); // xhr.~text자체는 문자열이므로 JSON 파싱을 해줘야함.
-                if(result.result !== "ok") return;
+                let resuleDiv = document.querySelector(".result");
+                if(result.email) resuleDiv.innerHTML="welcome!, "+ result.email;
                 document.querySelector(".result").innerHTML = result.email;
             });
             //응답이 왔을때

@@ -58,23 +58,15 @@ passport.use('local-login', new LocalStrategy({
         passwordField: 'password', // form 에서 email,password를 파라미터로 전달받기 때문에 그걸 사용한다고 해줌.
         passReqToCallback : true
     }, (req, email, password, done)=>{
-        console.log(1);
         const query = connection.query('select * from user where email=?', [email], (err, rows)=>{
             if(err) return done(err); // 없을경우 done으로 마무리
             if(rows.length){ // 있을경우 넘어감
-                console.log('existed user');
-                return done(null, false, {message : 'your email is already used'});
-                //http://www.passportjs.org/docs/downloads/html/ 에서 done 검색
-                //실패일 경우 false를 남기면 fail리다이렉트로 감 근데 여기선 메세지를 가져감
+                return done(null, {'email':rows.email, 'id':rows[0].UID});
+
             }else{
-                //정상일 경우 insert해줌
-            const sql = {email:email , pw : password};
-            const query = connection.query('insert into user set ?', sql, (err,rows)=>{
-                if(err) throw err;
-                return done(null , {'email':rows.email, 'id':rows.insertId}); //정상 작동일경우 false 안넣고 , 값을 넣어주면됨
+                return done(null , false, {'message': "your login info is not found"}); //정상 작동일경우 false 안넣고 , 값을 넣어주면됨
                 // 성공일 경우 메인으로 감
                 // + 시리얼 라이즈 처리 해줘야함
-            });
             }
 
         });
@@ -92,7 +84,7 @@ router.post('/', (req,res,next)=>{
             return res.json(user);
         });
         
-    })(req,res,next);
+    })(req,res,next);/* authenticate가 메서드를 반환 */
 }
 );
 
